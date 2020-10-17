@@ -1,22 +1,24 @@
 import React, { useState } from "react";
 import ModalCheckup from "./ModalCheckup";
-import { useHistory } from "react-router-dom";
 
+interface CloseLobby {
+    handleCloseLobby : () => void,
+    disable : boolean
 
-const CloseLobby = () => {
+}
+
+const CloseLobby = (props : CloseLobby) => {
+    const {handleCloseLobby,disable} = props
     const [show,setShow] = useState<boolean>(false)
-    const history = useHistory()
     const handleCancel = () => {
         setShow(false)
     }
     const handleAction = () => {
-        //post request delete Lobby
-        alert("Close")
-        history.replace("/")
+        handleCloseLobby()
     }
     return (
         <>
-            <button onClick={()=> {
+            <button disabled={disable}  onClick={()=> {
                 setShow(true)
             }} >Close Lobby</button>
             <ModalCheckup handleCancel={handleCancel} handleAction={handleAction} show={show} action="Close"  />

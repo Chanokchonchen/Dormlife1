@@ -23,6 +23,13 @@ interface propsJoinLobby {
     id? : ObjectID
 }
 
+interface propsSendMessage {
+    author : string,
+    userID : string,
+    message : string,
+    profilepic : number
+}
+
 async function getLobbys() {
     const result = await axios.get(`${API_URL}`)
     return result.data
@@ -39,13 +46,37 @@ async function joinLobby(form : propsJoinLobby) {
 
 }
 
-async function getSpecificLobby(id : string) {
-    const result = await axios.get(`${API_URL}${id}`)
+async function getSpecificLobby(lobbyID : string) {
+    const result = await axios.get(`${API_URL}${lobbyID}`)
     return result.data
 }
-async function setReady(id : string,userID : string) {
-    const result = await axios.post(`${API_URL}${id}/ready`,{userID : userID})
+async function setReady(lobbyID : string,userID : string) {
+    const result = await axios.post(`${API_URL}${lobbyID}/ready`,{userID : userID})
     return result.data
+}
+async function sendMessage(lobbyID : string,form : propsSendMessage) {
+    const result = await axios.post(`${API_URL}${lobbyID}/chat`,form)
+    return result.data   
+}
+async function getAllMessage(lobbyID : string) {
+    const result = await axios.get(`${API_URL}${lobbyID}/chat`)
+    return result.data   
+}
+async function kickMember(lobbyID : string,userID : string) {
+    const result = await axios.post(`${API_URL}${lobbyID}/kick`,{userID : userID})
+    return result.data
+}
+async function leaveLobby(lobbyID : string,userID : string) {
+    const result = await axios.post(`${API_URL}${lobbyID}/leave`,{userID : userID})
+    return result.data
+}
+async function deleteLobby(lobbyID : string) {
+    const result = await axios.post(`${API_URL}${lobbyID}/delete`)
+    return result.status
+}
+async function closeLobby(lobbyID : string) {
+    const result = await axios.post(`${API_URL}${lobbyID}/close`)
+    return result.status
 }
 
 export default {
@@ -53,5 +84,11 @@ export default {
     createLobby,
     joinLobby,
     getSpecificLobby,
-    setReady
+    setReady,
+    sendMessage,
+    getAllMessage,
+    kickMember,
+    leaveLobby,
+    deleteLobby,
+    closeLobby
 }

@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import ModalCheckup from "./ModalCheckup";
-import { useHistory } from "react-router-dom";
 
-const DeleteLobby = () => {
+interface DeleteProps {
+    handleDelete : () => void
+}
+
+const DeleteLobby = (props : DeleteProps) => {
+    const {handleDelete} = props
     const [show,setShow] = useState<boolean>(false)
-    const history = useHistory()
     const handleCancel = () => {
         setShow(false)
     }
     const handleAction = () => {
         //post request delete Lobby
-        alert("Delete")
-        history.replace("/")
+        handleDelete()
     }
     return (
         <div>

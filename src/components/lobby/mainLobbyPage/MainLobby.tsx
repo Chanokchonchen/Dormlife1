@@ -7,11 +7,10 @@ import LobbyList from "./LobbyList";
 import SearchBar from "./SearchBar"
 import { Lobby } from "./type"
 import lobbyService from "../../../services/lobby.service"
-import io from "socket.io-client";
-const SOCKET_IO_URL = "http://localhost:2000";
-const socket = io(SOCKET_IO_URL);
+import { useSocket } from "../../../contexts/socket.context";
 function MainLobby() {
   const history = useHistory();
+  const socket = useSocket();
   const [lobbylist,setLobbyList] = useState<Lobby[]>([])
   // const mockup : Lobby[] = [{dormName:"Hee" ,roomType:"Kuy" , link : "lobbyID1"},{dormName:"Kuy" ,roomType:"Hee" , link : "lobbyID2"}]
   const handleRouting = (s : string) => {
@@ -32,11 +31,19 @@ function MainLobby() {
   // },[])
   // test 
 
+  const getAllLobbys = async () => {
+    const allLobbys = await lobbyService.getLobbys();
+    setLobbyList(allLobbys)
+  }
+
   useEffect(() => {
-    lobbyService.getLobbys().then((res :  Lobby[]) => {
-      setLobbyList(res)
+    getAllLobbys()
+    socket.on("addlobby",()=> {
+      getAllLobbys()
+      
     })
-  },[])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
 
   return (
     <div>

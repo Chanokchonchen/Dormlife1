@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import ModalCheckup from "./ModalCheckup";
-import { useHistory } from "react-router-dom";
 
-const LeaveLobby = () => {
+interface LeaveProps {
+    handleLeave : () => void
+}
+
+const LeaveLobby = (props : LeaveProps) => {
+    const {handleLeave} = props
     const [show,setShow] = useState<boolean>(false)
-    const history = useHistory()
     const handleCancel = () => {
         setShow(false)
     }
     const handleAction = () => {
-        //post request delete membet in lobby
-        alert("Leave")
-        history.replace("/lobby")
+        handleLeave()
     }
     return (
         <div>

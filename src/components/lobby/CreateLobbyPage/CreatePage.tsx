@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import BackButton from "../mainLobbyPage/BackButton";
 import LobbyService from "../../../services/lobby.service"
+import { useSocket } from "../../../contexts/socket.context";
 const token = {
   userID : "1",
   name : {
@@ -11,6 +12,7 @@ const token = {
 }
 
 const CreatePage = () => {
+  const socket = useSocket()
   const history = useHistory();
   const [form,setForm] = useState({dormName : "" , roomType:""})
   const handleChangeInput = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +36,7 @@ const CreatePage = () => {
     const lobby = {...form,token,maxMember : 4} 
     const lobbyID : string = await LobbyService.createLobby(lobby)
     history.push(`/lobby/${lobbyID}`)
+    socket.emit("addlobby")
   }
   return (
     <>

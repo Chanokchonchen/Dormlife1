@@ -12,10 +12,11 @@ import Repassword from "./signin/Repassword";
 import MainLobby from "./lobby/mainLobbyPage/MainLobby";
 import CreatePage from "./lobby/CreateLobbyPage/CreatePage";
 import Lobby from "./lobby/LobbyPage/Lobby";
-
-
+import { socketContext, useSocket } from "../contexts/socket.context";
+import Chatpage from "./lobby/Chatpage/Chatpage";
 function App() {
     return (
+        <socketContext.Provider value={useSocket()}>
         <div style={{textAlign:"center"}}>
             <Switch>
                 <Route exact path="/" component={Home} />
@@ -29,8 +30,10 @@ function App() {
                 <Route exact path="/lobby" component={MainLobby} />
                 <Route exact path="/lobby/create" component={CreatePage} />
                 <Route exact path="/lobby/:lobbyID/:userID" component={Lobby} />
+                <Route exact path="/lobby/:lobbyID/chat/:userID" component={Chatpage} />
             </Switch>
         </div>
+        </socketContext.Provider>
     )
 }
 export default App;

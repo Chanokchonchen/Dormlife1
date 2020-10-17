@@ -5,7 +5,7 @@ import { ObjectID } from "mongodb"
 //     link : string,
 // }
 
-interface user {
+export interface user {
     userID : string,
     name : {
         firstName : string,

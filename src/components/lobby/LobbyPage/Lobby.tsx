@@ -9,10 +9,10 @@ import ImageList from "./ImageList";
 import ChatRoom from "./ChatRoom";
 import { Lobby } from "../mainLobbyPage/type";
 import lobbyService from "../../../services/lobby.service";
-import io from "socket.io-client";
-const SOCKET_IO_URL = "http://localhost:2000";
-const socket = io(SOCKET_IO_URL);
+import {useSocket} from "../../../contexts/socket.context"
+
 const LobbyPage = () => {
+    const socket = useSocket();
     const history = useHistory();
     const initialstate : Lobby = {
         owner : {
@@ -66,25 +66,58 @@ const LobbyPage = () => {
     }
     const getLobbyInfo = async () => {
         const lobby = await lobbyService.getSpecificLobby(lobbyID)
+        console.log(lobby)
         setLobbyInfo(lobby)
     }
     const setLobbyReadyInfo = async () => {
         const lobby = await lobbyService.setReady(lobbyID,currentUser.userID)
         setLobbyInfo(lobby)
     }
+    const handleGoChatPage = () => {
+        history.push(`/lobby/${lobbyID}/chat/${currentUser.userID}`)
+    }
+    const handleKick = async (userID : string) => {
+        await lobbyService.kickMember(lobbyID,userID)
+        socket.emit("kick",userID)
+    }
+    const handleLeave = async () => {
+        await lobbyService.leaveLobby(lobbyID,userID)
+        history.push("/")
+        socket.emit("leave")
+    }
+    const handleDelete = async () => {
+        await lobbyService.deleteLobby(lobbyID)
+        socket.emit("delete")
+    }
+    const handleCloseLobby = async () => {
+        await lobbyService.closeLobby(lobbyID)
+        socket.emit("close")
+    }
 
     useEffect(() => {
         getLobbyInfo()
-        socket.emit("join")
         socket.on("join",()=> {
             getLobbyInfo()
         })
         socket.on("ready",()=> {
             getLobbyInfo()
         })
-        //getRequest with lobbyID
-        //result form get request axios
-        //setLobbyInfo(result)
+        socket.on("leave",()=> {
+            getLobbyInfo()
+        })
+        socket.on("close",()=> {
+            history.push("/")
+        })
+        socket.on("delete",()=>{
+            history.push("/")
+        })
+        socket.on("kick",(userID : string)=> {
+            if (userID === currentUser.userID) {
+                history.push("/")
+            } else {
+                getLobbyInfo()
+            }     
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
@@ -93,14 +126,21 @@ const LobbyPage = () => {
             <HomeButton handleGoHome={handleGoHome} />
             <h1>{lobbyInfo.dormName} {lobbyInfo.roomType}</h1>
             <p>Lobby ID {lobbyID}</p>
-            <ImageList maxMember={lobbyInfo.maxMember} member={lobbyInfo.member}  />
-            { (lobbyInfo.owner.userID === currentUser.userID) ? <CloseLobby />  : <>
-            {lobbyInfo.member.find((mem => {
-                return mem.userID === currentUser.userID
-            }))?.ready ? <Ready text="Unready" handleReady={handleReady} /> : <Ready text="Ready" handleReady={handleReady} /> }
-            </> }
-            { lobbyInfo.owner.userID === currentUser.userID ? <DeleteLobby /> : <LeaveLobby />}
-            <ChatRoom />
+
+            {(lobbyInfo.owner.userID === currentUser.userID) ? 
+            <>
+                <ImageList handleKick={handleKick} isOwner={true} maxMember={lobbyInfo.maxMember} member={lobbyInfo.member}  />
+                <CloseLobby disable={lobbyInfo.member.some(mem => mem.ready === false)} handleCloseLobby={handleCloseLobby} />
+                <DeleteLobby handleDelete={handleDelete} />
+            </> 
+            : 
+            <>
+                <ImageList handleKick={handleKick} isOwner={false} maxMember={lobbyInfo.maxMember} member={lobbyInfo.member}  />
+                {lobbyInfo.member.find((mem => mem.userID === currentUser.userID))?.ready ? <Ready text="Unready" handleReady={handleReady} /> : <Ready text="Ready" handleReady={handleReady} /> }
+                <LeaveLobby handleLeave={handleLeave} />
+            </> 
+            }
+            <ChatRoom  handleGoChatPage={handleGoChatPage}/>
         </>
     )
 }

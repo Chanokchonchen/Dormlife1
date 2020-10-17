@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "./Image"
+import ImageOwner from "./ImageOwner";
 
 interface user {
     userID : string,
@@ -13,13 +14,15 @@ interface user {
 
 interface ImageProps {
     member : user[] ,
-    maxMember : number
+    maxMember : number,
+    isOwner : boolean,
+    handleKick : (userID : string) => void
 }
 
 
 const ImageList = (props : ImageProps) => {
 
-    const {member,maxMember} = props
+    const {member,maxMember,isOwner,handleKick} = props
     const [space ,setSpace] = useState<number[]>([])
     const remainPerson = maxMember  - member.length
     const temps : number[] = []
@@ -36,12 +39,17 @@ const ImageList = (props : ImageProps) => {
     },[member])
     return (
         <div>
-            {member.map((user,index) => {
-                return <Image attr={user} key={index} />
-            })}
-            {space.map((temp,index) => {
-                return <img alt="" key={index} style={{margin:"2%",border:"10px solid #000",width:"200px",height:"200px"}} />
-            })}
+            {isOwner ? 
+            <>
+                {member.map((user,index) => <ImageOwner handleKick={handleKick} attr={user} key={index} index={index} />)}
+            </> 
+            : 
+            <>
+                {member.map((user,index) => <Image attr={user} key={index} index={index} />)}Î
+            </>
+            }
+            {space.map((temp,index) => <img alt="" key={index} style={{margin:"2%",border:"10px solid #000",width:"200px",height:"200px"}} />
+            )}
 
         </div>
     )

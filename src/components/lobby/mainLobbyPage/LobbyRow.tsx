@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React  from "react";
 import { ObjectID } from "mongodb"
 import { useHistory } from "react-router-dom";
 import lobbyService from "../../../services/lobby.service";
+import { useSocket } from "../../../contexts/socket.context";
 interface lobbyProps {
     dormName : string,
     roomType : string,
@@ -17,7 +19,7 @@ const token = {
 }
 
 const LobbyRow = (props : lobbyProps) => {
-
+    const socket = useSocket()
     const {dormName,roomType,_id} = props
     const history = useHistory()
     return (
@@ -28,6 +30,7 @@ const LobbyRow = (props : lobbyProps) => {
                     token : token
                 }
                 await lobbyService.joinLobby(param)
+                socket.emit("join")
                 history.push(`/lobby/${_id}`)
             }}><p>{dormName}, {roomType}</p></a>
         </div>

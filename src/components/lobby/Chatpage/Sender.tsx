@@ -6,15 +6,7 @@ import catp from "../../pic/finder_silver_1p.jpg"
 import dogp from "../../pic/finder_silver_2p.jpg"
 import mon from "../../pic/finder_silver_3.jpg"
 import monp from "../../pic/finder_silver_3p.jpg"
-
-
-interface propsSender {
-  author : string,
-  userID : string,
-  message : string,
-  profilepic : number,
-  time? : Date
-}
+import { propsSender } from "../../type";
 
 const Sender = (props : propsSender) => {
   const {author,message,profilepic} = props

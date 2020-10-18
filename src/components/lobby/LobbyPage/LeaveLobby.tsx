@@ -1,11 +1,10 @@
 import React, { useState } from "react";
+import { LeaveLobbyProps } from "../../type";
 import ModalCheckup from "./ModalCheckup";
 
-interface LeaveProps {
-    handleLeave : () => void
-}
 
-const LeaveLobby = (props : LeaveProps) => {
+
+const LeaveLobby = (props : LeaveLobbyProps) => {
     const {handleLeave} = props
     const [show,setShow] = useState<boolean>(false)
     const handleCancel = () => {

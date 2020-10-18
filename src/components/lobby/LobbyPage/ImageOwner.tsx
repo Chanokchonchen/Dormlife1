@@ -9,33 +9,11 @@ import { useParams } from "react-router-dom"
 import { Button } from "react-bootstrap"
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
 import "./image.css"
-interface user {
-    userID : string,
-    name : {
-        firstName : string,
-        lastName : string
-    },
-    profilepic : number,
-    ready : boolean
-}
-
-interface ImagesProps {
-    attr : user
-    handleKick : (userID : string) => void,
-    index : number
-}
-
-interface testUser {
-    userID : string
-}
+import { ImagesOwnerProps } from "../../type"
 
 
-
-const ImageOwner = (props : ImagesProps) =>  {
-    const {userID} : {userID:string} = useParams()
-    const tokenOwner : testUser = {
-        userID : userID,
-    }
+const ImageOwner = (props : ImagesOwnerProps) =>  {
+    const {userID} : {userID:string} = useParams() // ใข้ token เวลาทำจริงๆ
     const AllImage = [dog,cat,mon,dogp,catp,monp]
     const {attr,handleKick,index} = props
     const handleClick = () => {
@@ -45,7 +23,7 @@ const ImageOwner = (props : ImagesProps) =>  {
         <>
         {index === 0 ? 
             <>
-                {(attr.userID === tokenOwner.userID) ? (
+                {(attr.userID === userID) ? (
                     <img alt="" style={{margin:"2%",border:"10px solid #8cd3ff",width:"200px" ,height:"200px"}} src={AllImage[attr.profilepic]} />)
                     : 
                     <div className="image">
@@ -57,7 +35,7 @@ const ImageOwner = (props : ImagesProps) =>  {
             </> 
         : 
             <>
-                {(attr.userID === tokenOwner.userID) ? (
+                {(attr.userID === userID) ? (
                     <img alt="" style={{margin:"2%",border:"10px solid #8cd3ff",width:"200px" ,height:"200px"}} src={attr.ready ? AllImage[attr.profilepic+3] : AllImage[attr.profilepic]} />)
                     : 
                     <div className="image">

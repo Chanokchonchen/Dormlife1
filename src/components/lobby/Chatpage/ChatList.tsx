@@ -1,8 +1,7 @@
 import React from "react";
+import { ChatListProps } from "../../type";
 
-interface ChatListProps {
-    children: React.ReactNode
-}
+
 
 const ChatList = (props : ChatListProps) => {
     const {children} = props

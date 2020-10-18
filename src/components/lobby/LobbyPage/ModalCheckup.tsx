@@ -1,13 +1,9 @@
 import React  from "react";
 import { Modal } from "react-bootstrap";
-interface ModalProps {
-  show: boolean,
-  action: string,
-  handleAction: () => void,
-  handleCancel : ()=> void
-}
+import { ModalLobbyPageProps } from "../../type";
 
-const ModalCheckup = (props : ModalProps) => {
+
+const ModalCheckup = (props : ModalLobbyPageProps) => {
     const {show , action , handleAction , handleCancel} = props
     return (
         <Modal show={show} size="lg" centered  dialogClassName="">

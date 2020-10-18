@@ -1,24 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React  from "react";
-import { ObjectID } from "mongodb"
 import { useHistory } from "react-router-dom";
 import lobbyService from "../../../services/lobby.service";
 import { useSocket } from "../../../contexts/socket.context";
-interface lobbyProps {
-    dormName : string,
-    roomType : string,
-    _id? : ObjectID
-}
+import { LobbyRowProps } from "../../type"
+import { token2 } from "../../test"
 
-const token = {
-    userID : "2",
-    name : {
-        firstName : "Prangthip",
-        lastName : "Chen"
-    }
-}
-
-const LobbyRow = (props : lobbyProps) => {
+const LobbyRow = (props : LobbyRowProps) => {
     const socket = useSocket()
     const {dormName,roomType,_id} = props
     const history = useHistory()
@@ -27,7 +15,7 @@ const LobbyRow = (props : lobbyProps) => {
             <a onClick={async ()=> {
                 const param = {
                     id : _id,
-                    token : token
+                    token : token2 
                 }
                 await lobbyService.joinLobby(param)
                 socket.emit("join")

@@ -9,21 +9,8 @@ import ChatList from "./ChatList";
 import { useSocket } from "../../../contexts/socket.context";
 import lobbyService from "../../../services/lobby.service";
 import { useParams } from "react-router-dom";
-
-
-interface chat {
-    author : string,
-    userID : string,
-    message : string,
-    profilepic : number
-    time : Date
-}
-interface propsSendMessage {
-    author : string,
-    userID : string,
-    message : string,
-    profilepic : number
-}
+import { propsSendMessage  , chat} from "../../type";
+import { token1 , token2 } from "../../test"
 
 const Chatpage = () => {
     const socket = useSocket()
@@ -40,23 +27,9 @@ const Chatpage = () => {
         profilepic : 0
     }
     if (userID === "1") {
-        token = {
-            userID : "1",
-            name : {
-                firstName : "Chanokchon",
-                lastName : "Chen"
-            },
-            profilepic : 1
-        }
+        token = token1
     } else  {
-        token = {
-            userID : "2",
-            name : {
-                firstName : "Prangthip",
-                lastName : "Chen"
-            },
-            profilepic : 0
-        }    
+        token = token2 
     }
 
     const getAllChat = async () => {

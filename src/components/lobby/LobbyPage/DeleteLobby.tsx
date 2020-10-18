@@ -1,11 +1,8 @@
 import React, { useState } from "react";
+import { DeleteLobbyProps } from "../../type";
 import ModalCheckup from "./ModalCheckup";
 
-interface DeleteProps {
-    handleDelete : () => void
-}
-
-const DeleteLobby = (props : DeleteProps) => {
+const DeleteLobby = (props : DeleteLobbyProps) => {
     const {handleDelete} = props
     const [show,setShow] = useState<boolean>(false)
     const handleCancel = () => {

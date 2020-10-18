@@ -7,9 +7,11 @@ import LeaveLobby from "./LeaveLobby";
 import Ready from "./Ready"
 import ImageList from "./ImageList";
 import ChatRoom from "./ChatRoom";
-import { Lobby } from "../mainLobbyPage/type";
+import { Lobby } from "../../type";
 import lobbyService from "../../../services/lobby.service";
 import {useSocket} from "../../../contexts/socket.context"
+import {token1 , token2} from "../../test"
+
 
 const LobbyPage = () => {
     const socket = useSocket();
@@ -32,30 +34,19 @@ const LobbyPage = () => {
     }
 
     const [lobbyInfo,setLobbyInfo] =  useState<Lobby>(initialstate)
-    const {lobbyID,userID} : {lobbyID:string,userID:string} = useParams();
-    var currentUser = {
-            userID : "",
-            name : {
-                firstName : "",
-                lastName : ""
-            }
+    const {lobbyID,userID} : {lobbyID:string,userID:string} = useParams(); 
+    var token = {
+        userID : "",
+        name : {
+            firstName : "",
+            lastName : ""
+        },
+        profilepic : 0
     }
     if (userID === "1") {
-        currentUser = {
-            userID : "1",
-            name : {
-                firstName : "Chanokchon",
-                lastName : "Chen"
-            }
-        }
+        token = token1
     } else {
-        currentUser = {
-            userID : "2",
-            name : {
-                firstName : "Prangthip",
-                lastName : "Chen"
-            }
-        }        
+        token = token2     
     }
     const handleGoHome = () => {
         history.push("/")
@@ -70,11 +61,11 @@ const LobbyPage = () => {
         setLobbyInfo(lobby)
     }
     const setLobbyReadyInfo = async () => {
-        const lobby = await lobbyService.setReady(lobbyID,currentUser.userID)
+        const lobby = await lobbyService.setReady(lobbyID,token.userID)
         setLobbyInfo(lobby)
     }
     const handleGoChatPage = () => {
-        history.push(`/lobby/${lobbyID}/chat/${currentUser.userID}`)
+        history.push(`/lobby/${lobbyID}/chat/${token.userID}`)
     }
     const handleKick = async (userID : string) => {
         await lobbyService.kickMember(lobbyID,userID)
@@ -112,7 +103,7 @@ const LobbyPage = () => {
             history.push("/")
         })
         socket.on("kick",(userID : string)=> {
-            if (userID === currentUser.userID) {
+            if (userID === token.userID) {
                 history.push("/")
             } else {
                 getLobbyInfo()
@@ -127,7 +118,7 @@ const LobbyPage = () => {
             <h1>{lobbyInfo.dormName} {lobbyInfo.roomType}</h1>
             <p>Lobby ID {lobbyID}</p>
 
-            {(lobbyInfo.owner.userID === currentUser.userID) ? 
+            {(lobbyInfo.owner.userID === token.userID) ? 
             <>
                 <ImageList handleKick={handleKick} isOwner={true} maxMember={lobbyInfo.maxMember} member={lobbyInfo.member}  />
                 <CloseLobby disable={lobbyInfo.member.some(mem => mem.ready === false)} handleCloseLobby={handleCloseLobby} />
@@ -136,7 +127,7 @@ const LobbyPage = () => {
             : 
             <>
                 <ImageList handleKick={handleKick} isOwner={false} maxMember={lobbyInfo.maxMember} member={lobbyInfo.member}  />
-                {lobbyInfo.member.find((mem => mem.userID === currentUser.userID))?.ready ? <Ready text="Unready" handleReady={handleReady} /> : <Ready text="Ready" handleReady={handleReady} /> }
+                {lobbyInfo.member.find((mem => mem.userID === token.userID))?.ready ? <Ready text="Unready" handleReady={handleReady} /> : <Ready text="Ready" handleReady={handleReady} /> }
                 <LeaveLobby handleLeave={handleLeave} />
             </> 
             }

@@ -1,12 +1,10 @@
 import React  from "react";
 import LobbyRow from "./LobbyRow";
-import { Lobby } from "./type";
+import { LobbyListProps } from "../../type";
 
-interface propsLobby {
-    lobbylist : Lobby[]
-}
 
-const LobbyList = (props : propsLobby) => {
+
+const LobbyList = (props : LobbyListProps) => {
     const {lobbylist} = props
     return (
         <>

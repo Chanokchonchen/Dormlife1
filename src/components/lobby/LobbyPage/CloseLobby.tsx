@@ -1,13 +1,8 @@
 import React, { useState } from "react";
+import { CloseLobbyProps } from "../../type";
 import ModalCheckup from "./ModalCheckup";
 
-interface CloseLobby {
-    handleCloseLobby : () => void,
-    disable : boolean
-
-}
-
-const CloseLobby = (props : CloseLobby) => {
+const CloseLobby = (props : CloseLobbyProps) => {
     const {handleCloseLobby,disable} = props
     const [show,setShow] = useState<boolean>(false)
     const handleCancel = () => {

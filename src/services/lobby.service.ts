@@ -1,25 +1,19 @@
 import axios from "axios";
 import { ObjectID } from "mongodb"
+import { Token } from "../components/type"
 const API_URL = "http://localhost:2000/lobbies/"
 
-interface token {
-    userID : string,
-    name : {
-        firstName : string,
-        lastName : string
-    }
-}
 
 interface propsCreateLobby {
     maxMember : number
     dormName : string,
     roomType : string
-    token : token
+    token : Token
     //ควรเป็น dormName เพราะรับมาเป็น dormName
 }
 
 interface propsJoinLobby {
-    token : token,
+    token : Token,
     id? : ObjectID
 }
 

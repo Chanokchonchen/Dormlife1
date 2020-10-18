@@ -1,10 +1,9 @@
 import React , {useState} from "react";
 import { Button, InputGroup, FormControl } from "react-bootstrap";
 import MailIcon from '@material-ui/icons/Mail';
+import { ChatBoxProps } from "../../type";
 
-interface ChatBoxProps {
-  handleSubmit : (message : string) => void
-}
+
 
 const Chatbox = (props : ChatBoxProps) => {
   const {handleSubmit} = props

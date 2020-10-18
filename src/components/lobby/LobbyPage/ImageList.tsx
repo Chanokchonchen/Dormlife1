@@ -1,26 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Image from "./Image"
 import ImageOwner from "./ImageOwner";
+import { ImagesListProps } from "../../type"
 
-interface user {
-    userID : string,
-    name : {
-        firstName : string,
-        lastName : string
-    },
-    profilepic : number,
-    ready : boolean
-}
-
-interface ImageProps {
-    member : user[] ,
-    maxMember : number,
-    isOwner : boolean,
-    handleKick : (userID : string) => void
-}
-
-
-const ImageList = (props : ImageProps) => {
+const ImageList = (props : ImagesListProps) => {
 
     const {member,maxMember,isOwner,handleKick} = props
     const [space ,setSpace] = useState<number[]>([])

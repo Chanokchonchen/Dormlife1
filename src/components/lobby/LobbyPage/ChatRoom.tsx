@@ -1,10 +1,8 @@
 import React from "react";
+import { ChatRoomProps } from "../../type";
 
-interface ChatProps {
-    handleGoChatPage : () => void
-}
 
-const ChatRoom = (props : ChatProps) => {
+const ChatRoom = (props : ChatRoomProps) => {
     const {handleGoChatPage} = props
     return (
         <button onClick={handleGoChatPage}>Chat Room</button>

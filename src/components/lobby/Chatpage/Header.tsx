@@ -3,6 +3,7 @@ import { Navbar, Nav, Button } from "react-bootstrap";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import { withStyles, createStyles } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import { Style } from "../../type";
 
 const styles = createStyles({
     navCenter: {
@@ -18,9 +19,7 @@ const styles = createStyles({
         backgroundColor : "#F55E61"
     }
 });
-interface Style {
-    classes?: any;
-}
+
 
 const Header = (props : Style) => {
     const history = useHistory()
